@@ -1,5 +1,7 @@
 package com.gustavooarantes.desafio_btg_pactual.controller;
 
+import java.util.Map;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,10 @@ public class OrderController {
       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
     var pageResponse = service.findAllByCustomerId(customerId, PageRequest.of(page, pageSize));
+    var totalOnOrders = service.findTotalOnOrdersByCustomerId(customerId);
 
     return ResponseEntity.ok(new Response<>(
+        Map.of("totalOnOrders", totalOnOrders),
         pageResponse.getContent(),
         PaginationResponse.fromPage(pageResponse)));
   }
